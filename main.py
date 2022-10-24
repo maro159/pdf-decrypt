@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 from PyPDF2 import PdfFileReader
 
-# TODO: set where your pdf file in
-fileDir = ""
-# TODO: set password of your password
-password = ""
+
+fileDir = sys.argv[1]
+if len(sys.argv) > 2:
+    password = sys.argv[2]
+
+print(fileDir)
+print(password)
 
 for r, d, f in os.walk(fileDir):
     for file in f:
         if file.endswith(".pdf"):
             filepath = os.path.join(r, file)
             pdfFile = PdfFileReader(filepath)
-            if pdfFile.isEncrypted:
+            if pdfFile.is_encrypted:
                 print("[Processing]", filepath)
                 cmd = "copy \"" + filepath + "\" temp.pdf >nul"
                 print(cmd)
@@ -26,4 +30,4 @@ for r, d, f in os.walk(fileDir):
                 print("[Finished]", filepath, 'File Decrypted (qpdf)')
             else:
                 pass
-                # print("[Finished]", filepath, 'File Not Encrypted')
+                print("[Finished]", filepath, 'File Not Encrypted')
